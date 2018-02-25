@@ -7,15 +7,15 @@ using System.Globalization;
 using System.Data;
 using System.Windows.Forms;
 using System.Data.OleDb;
-using ExcelDataReader;
 using System.Reflection;
 using System.IO;
+using Microsoft.Office.Interop.Excel;
 
 namespace ImportExcelFile
 {
     static class DataAccess
     {
-        public static DataTable importExcelFileData(DataGridView dataGridViewName, string fileName)
+        public static System.Data.DataTable importExcelFileData(DataGridView dataGridViewName, string fileName)
         {
             string _tabName = "Data";
             string _header = "YES";
@@ -28,7 +28,7 @@ namespace ImportExcelFile
 
 
             OleDbDataAdapter sda = new OleDbDataAdapter(oconn);
-            DataTable data = new DataTable();
+            System.Data.DataTable data = new System.Data.DataTable();
             sda.Fill(data);
 
             return data;
@@ -37,9 +37,9 @@ namespace ImportExcelFile
 
         }
 
-        public static DataTable addCalcTableCols(DataTable importData)
+        public static System.Data.DataTable addCalcTableCols(System.Data.DataTable importData)
         {
-            DataTable _returnTable = new DataTable();
+            System.Data.DataTable _returnTable = new System.Data.DataTable();
             //_returnTable = importData;
 
             _returnTable.Columns.Add("Month", typeof(string));
@@ -106,7 +106,8 @@ namespace ImportExcelFile
                 string _officialRaceTime = Convert.ToString(row["Official_RT"]);
 
                 //runtime
-                string _runTime = Convert.ToString(row["Run_Times"]);
+                //string _runTime = Convert.ToString(row["Run_Times"]);
+                string _runTime = Convert.ToString(row["Run_Times"], IefAppSettings.CurCulture());
 
                 startIndexMin = 0;
                 endIndexMin = _runTime.IndexOf(charRange);
@@ -157,7 +158,7 @@ namespace ImportExcelFile
             return _returnTable;
         }
 
-        public static void populateDataGridView(DataGridView dataGridViewName, DataTable data)
+        public static void populateDataGridView(DataGridView dataGridViewName, System.Data.DataTable data)
         {
             dataGridViewName.DataSource = data;
         }
@@ -229,24 +230,97 @@ namespace ImportExcelFile
             return _runType;
         }
 
-        /*
-        public static System.Data.DataTable GetExcelData(string location, string sheet, string tableName)
+
+        public static void ExportToExcel(DataGridView dataGridName)
         {
-            FileStream stream = File.Open(location, FileMode.Open, FileAccess.Read);
-            IExcelDataReader excelReader = null;
-            if (location.Contains("xlsx"))
+            // Creating a Excel object. 
+            Microsoft.Office.Interop.Excel._Application excel = new Microsoft.Office.Interop.Excel.Application();
+            Microsoft.Office.Interop.Excel._Workbook workbook = excel.Workbooks.Add(Type.Missing);
+            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+
+            try
             {
-                excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+
+                worksheet = workbook.ActiveSheet;
+
+                worksheet.Name = "ExportedFromDatGrid";
+
+                int cellRowIndex = 1;
+                int cellColumnIndex = 1;
+
+                //Loop through each row and read value from each column. 
+                for (int i = 0; i < dataGridName.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < dataGridName.Columns.Count; j++)
+                    {
+                        // Excel index starts from 1,1. As first Row would have the Column headers, adding a condition check. 
+                        if (cellRowIndex == 1)
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dataGridName.Columns[j].HeaderText;
+                        }
+                        else
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dataGridName.Rows[i].Cells[j].Value.ToString();
+                        }
+                        cellColumnIndex++;
+                    }
+                    cellColumnIndex = 1;
+                    cellRowIndex++;
+                }
+
+                //Getting the location and file name of the excel to save from user. 
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+                saveDialog.FilterIndex = 2;
+
+                if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    workbook.SaveAs(saveDialog.FileName);
+                    MessageBox.Show("Export Successful");
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                excel.Quit();
+                workbook = null;
+                excel = null;
             }
 
-            DataSet result = excelReader.AsDataSet();
-            excelReader.Close();
+        }
 
-            return result.Tables[tableName];
-        } */
+
+
+        public static void ToCsV(DataGridView dGV, string filename)
+        {
+            string stOutput = "";
+            // Export titles:
+            string sHeaders = "";
+
+            for (int j = 0; j < dGV.Columns.Count; j++)
+                sHeaders = sHeaders.ToString() + Convert.ToString(dGV.Columns[j].HeaderText) + "\t";
+            stOutput += sHeaders + "\r\n";
+            // Export data.
+            for (int i = 0; i < dGV.RowCount - 1; i++)
+            {
+                string stLine = "";
+                for (int j = 0; j < dGV.Rows[i].Cells.Count; j++)
+                    stLine = stLine.ToString() + Convert.ToString(dGV.Rows[i].Cells[j].Value) + "\t";
+                stOutput += stLine + "\r\n";
+            }
+            Encoding utf16 = Encoding.GetEncoding(1254);
+            byte[] output = utf16.GetBytes(stOutput);
+            FileStream fs = new FileStream(filename, FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(output, 0, output.Length); //write the encoded file
+            bw.Flush();
+            bw.Close();
+            fs.Close();
+        }
+
+
     }
 }

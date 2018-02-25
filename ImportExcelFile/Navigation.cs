@@ -85,6 +85,26 @@ namespace ImportExcelFile
             
         }
 
+        private void btnExportToExcel_Click(object sender, EventArgs e)
+        {
 
+            //Export to excel
+            DataAccess.ExportToExcel(dataGridView1);
+
+
+            /*
+            //export to CSV
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            sfd.FilterIndex = 2;
+            sfd.FileName = "export.csv";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                //ToCsV(dataGridView1, @"c:\export.xls");
+                DataAccess.ToCsV(dataGridView1, sfd.FileName); // Here dataGridview1 is your grid view name
+            }
+            */
+
+        }
     }
 }

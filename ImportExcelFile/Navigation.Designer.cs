@@ -33,12 +33,13 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.txtUserStride = new System.Windows.Forms.TextBox();
             this.lblUserStride = new System.Windows.Forms.Label();
+            this.btnExportToExcel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnImportExcelFile
             // 
-            this.btnImportExcelFile.Location = new System.Drawing.Point(586, 13);
+            this.btnImportExcelFile.Location = new System.Drawing.Point(296, 15);
             this.btnImportExcelFile.Name = "btnImportExcelFile";
             this.btnImportExcelFile.Size = new System.Drawing.Size(122, 23);
             this.btnImportExcelFile.TabIndex = 0;
@@ -82,11 +83,22 @@
             this.lblUserStride.Text = "Enter User Stride";
             this.lblUserStride.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnExportToExcel
+            // 
+            this.btnExportToExcel.Location = new System.Drawing.Point(586, 15);
+            this.btnExportToExcel.Name = "btnExportToExcel";
+            this.btnExportToExcel.Size = new System.Drawing.Size(122, 23);
+            this.btnExportToExcel.TabIndex = 5;
+            this.btnExportToExcel.Text = "Export To Excel";
+            this.btnExportToExcel.UseVisualStyleBackColor = true;
+            this.btnExportToExcel.Click += new System.EventHandler(this.btnExportToExcel_Click);
+            // 
             // Navigation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 461);
+            this.Controls.Add(this.btnExportToExcel);
             this.Controls.Add(this.lblUserStride);
             this.Controls.Add(this.txtUserStride);
             this.Controls.Add(this.dataGridView1);
@@ -107,6 +119,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TextBox txtUserStride;
         private System.Windows.Forms.Label lblUserStride;
+        private System.Windows.Forms.Button btnExportToExcel;
     }
 }
 
