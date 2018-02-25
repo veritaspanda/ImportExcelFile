@@ -20,5 +20,16 @@ namespace ImportExcelFile
             return _CurCulture;
         }
 
+        public static int WeekOfYear(CultureInfo Culture, DateTime dt)
+        {
+            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            Calendar cal = dfi.Calendar;
+
+            int _wkOfYear = cal.GetWeekOfYear(dt, dfi.CalendarWeekRule,
+                                          dfi.FirstDayOfWeek);
+
+            return _wkOfYear;
+        }
+
     }
 }

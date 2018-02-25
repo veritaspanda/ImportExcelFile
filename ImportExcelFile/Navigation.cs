@@ -24,7 +24,9 @@ namespace ImportExcelFile
         private void btnImportExcelFile_Click(object sender, EventArgs e)
         {
             string _fileName = GetImportFile();
-            DataAccess.importExcelFileData(dataGridView1, _fileName);
+            DataTable _data = DataAccess.importExcelFileData(dataGridView1, _fileName);
+            _data = DataAccess.addCalcTableCols(_data);
+            DataAccess.populateDataGridView(dataGridView1, _data);
         }
 
         public static string GetImportFile()
@@ -34,8 +36,8 @@ namespace ImportExcelFile
             string _strFile = "";
 
             OpenFileDialog _openImportFile = new OpenFileDialog();
-            _openImportFile.Filter = "";
-            _openImportFile.FilterIndex = 2;
+            _openImportFile.Filter = Constants.OpenFileFilter;
+            _openImportFile.FilterIndex = 1;
             _openImportFile.RestoreDirectory = true;
             _openImportFile.CheckFileExists = true;
 
@@ -65,5 +67,24 @@ namespace ImportExcelFile
         {
 
         }
+
+        private void txtUserStride_TextChanged(object sender, EventArgs e)
+        {
+            
+            Int32 _defaultInt = 2000;
+            if (!Int32.TryParse(txtUserStride.Text, out _defaultInt))
+            {
+                ActivityData.UserStride = _defaultInt;
+                MessageBox.Show(Constants.ErrorEnterValidInteger, Constants.GeneralError, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            }
+            else
+            {
+                ActivityData.UserStride = Convert.ToInt32(txtUserStride.Text, IefAppSettings.CurCulture());
+
+            }
+            
+        }
+
+
     }
 }

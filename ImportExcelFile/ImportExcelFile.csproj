@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityData.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DataAccess.cs" />
     <Compile Include="IefAppSettings.cs" />
     <Compile Include="Navigation.cs">
