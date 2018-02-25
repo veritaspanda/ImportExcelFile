@@ -101,7 +101,7 @@ namespace ImportExcelFile
                 decimal _steps = Convert.ToDecimal(row["Steps"]);
                 decimal _milesCalc = (_steps/ActivityData.UserStride);
                 string _raceDates = Convert.ToString(row["Race_Dates"]);
-                string _raceType = "No Run";
+                string _raceType = GetRunType(Convert.ToSingle(_runMiles));
                 string _raceTime = Convert.ToString(row["Race_Times"]);
                 string _officialRaceTime = Convert.ToString(row["Official_RT"]);
 
@@ -160,6 +160,73 @@ namespace ImportExcelFile
         public static void populateDataGridView(DataGridView dataGridViewName, DataTable data)
         {
             dataGridViewName.DataSource = data;
+        }
+
+        public static string GetRunType(float runMiles)
+        {
+            string _runType = "";
+
+            if (runMiles >= 30)
+            {
+                _runType = "Ultra";
+                return _runType;
+            }
+            if (runMiles >= 26.2)
+            {
+                _runType = "Marathon";
+                return _runType;
+            }
+            if (runMiles >= 18.6)
+            {
+                _runType = "30K+";
+                return _runType;
+            }
+            if (runMiles >= 15.5)
+            {
+                _runType = "25K+";
+                return _runType;
+            }
+            if (runMiles >= 13.1)
+            {
+                _runType = "Half Marathon";
+                return _runType;
+            }
+            if (runMiles >= 12.4)
+            {
+                _runType = "20K+";
+                return _runType;
+            }
+            if (runMiles >= 9.3)
+            {
+                _runType = "15K+";
+                return _runType;
+            }
+            if (runMiles >= 6.2)
+            {
+                _runType = "10K+";
+                return _runType;
+            }
+            if (runMiles >= 4.97)
+            {
+                _runType = "8K+";
+                return _runType;
+            }
+            if (runMiles >= 3.1)
+            {
+                _runType = "5K+";
+                return _runType;
+            }
+            if (runMiles > 0)
+            {
+                _runType = "Less than 5K";
+                return _runType;
+            }
+            else
+            {
+                _runType = "No Run";
+            }
+
+            return _runType;
         }
 
         /*
