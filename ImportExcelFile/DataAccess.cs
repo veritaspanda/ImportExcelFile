@@ -75,6 +75,18 @@ namespace ImportExcelFile
             foreach (DataRow row in importData.Rows)
             {
 
+                Char charRange = ':';
+                int startIndexMin = 0;
+                int endIndexMin = 0;
+                int lengthMin = 0;
+                int startIndexSec = 0;
+                int endIndexSec = 0;
+                int lengthSec = 0;
+
+                //startIndex = _runTime.IndexOf(charRange);
+                //endIndex = _runTime.LastIndexOf(charRange);
+                //length = endIndex - startIndex + 1;
+
                 string _month = Convert.ToDateTime(row["Date"]).ToString("MMMM");
                 string _weekday = Convert.ToDateTime(row["Date"]).ToString("dddd");
                 DateTime _dt = Convert.ToDateTime(row["Date"]);
@@ -92,15 +104,45 @@ namespace ImportExcelFile
                 string _raceType = "No Run";
                 string _raceTime = Convert.ToString(row["Race_Times"]);
                 string _officialRaceTime = Convert.ToString(row["Official_RT"]);
+
+                //runtime
                 string _runTime = Convert.ToString(row["Run_Times"]);
-                Int32 _runMin = 1;
-                Int32 _runSec = 1;
+
+                startIndexMin = 0;
+                endIndexMin = _runTime.IndexOf(charRange);
+                lengthMin = endIndexMin - startIndexMin;
+                Int32 _runMin = Convert.ToInt32(_runTime.Substring(startIndexMin, lengthMin));
+
+                startIndexSec = _runTime.IndexOf(charRange) +1;
+                endIndexSec = _runTime.Length;
+                lengthSec = endIndexSec - startIndexSec;
+                Int32 _runSec = Convert.ToInt32(_runTime.Substring(startIndexSec, lengthSec));
+
+                //bike time
                 string _bikeTime = Convert.ToString(row["Bike_Time"]);
-                Int32 _bikeMin = 1;
-                Int32 _bikeSec = 1;
+
+                startIndexMin = 0;
+                endIndexMin = _bikeTime.IndexOf(charRange);
+                lengthMin = endIndexMin - startIndexMin;
+                Int32 _bikeMin = Convert.ToInt32(_bikeTime.Substring(startIndexMin, lengthMin));
+
+                startIndexSec = _bikeTime.IndexOf(charRange) +1;
+                endIndexSec = _bikeTime.Length;
+                lengthSec = endIndexSec - startIndexSec;
+                Int32 _bikeSec = Convert.ToInt32(_bikeTime.Substring(startIndexSec, lengthSec));
+
+                //walktime
                 string _walkTime = Convert.ToString(row["Walk_Time"]);
-                Int32 _walkMin = 1;
-                Int32 _walkSec = 1;
+
+                startIndexMin = 0;
+                endIndexMin = _walkTime.IndexOf(charRange);
+                lengthMin = endIndexMin - startIndexMin;
+                Int32 _walkMin = Convert.ToInt32(_walkTime.Substring(startIndexMin, lengthMin));
+
+                startIndexSec = _walkTime.IndexOf(charRange) +1;
+                endIndexSec = _walkTime.Length;
+                lengthSec = endIndexSec - startIndexSec;
+                Int32 _walkSec = Convert.ToInt32(_walkTime.Substring(startIndexSec, lengthSec));
 
 
 
