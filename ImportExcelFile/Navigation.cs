@@ -24,9 +24,9 @@ namespace ImportExcelFile
         private void btnImportExcelFile_Click(object sender, EventArgs e)
         {
             string _fileName = GetImportFile();
-            DataTable _data = DataAccess.importExcelFileData(dataGridView1, _fileName);
+            DataTable _data = DataAccess.importExcelFileData(gridExcelImportView, _fileName);
             _data = DataAccess.addCalcTableCols(_data);
-            DataAccess.populateDataGridView(dataGridView1, _data);
+            DataAccess.populateDataGridView(gridExcelImportView, _data);
         }
 
         public static string GetImportFile()
@@ -89,7 +89,7 @@ namespace ImportExcelFile
         {
 
             //Export to excel
-            DataAccess.ExportToExcel(dataGridView1);
+            DataAccess.ExportToExcel(gridExcelImportView);
 
 
             /*
